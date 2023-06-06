@@ -1,16 +1,16 @@
 /// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
-import "./openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol";
-import "./openzeppelin-contracts/contracts/utils/Counters.sol";
-import "./openzeppelin-contracts/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 contract CruiseLine is ERC1155, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIds;
+    Counters.Counter private _sailingIds;
 
     // Mapping to keep track of balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -18,13 +18,23 @@ contract CruiseLine is ERC1155, Ownable {
     // Mapping to store cabin details
     mapping(uint256 => Cabin) private _cabins;
 
+    // Mapping to store sailing details
+    mapping(uint256 => Sailing) private _sailings;
+
     // Mapping to track tokens minted by tokenId
     mapping(uint256 => uint256) private _cabinsMinted;
+
+    // Struct to represent a sailing
+    struct Sailing {
+        uint256 sailingId;
+        uint256 departureDate;
+        uint256 numberOfNights;
+        string shipName;
+    }
 
     // Struct to represent a cabin
     struct Cabin {
         uint256 price;
-        uint256 departureDate;
         uint256 availability;
         string cabinType;
     }
@@ -48,10 +58,16 @@ contract CruiseLine is ERC1155, Ownable {
         uint256 newAvailability
     );
 
+    event SailingCreated(
+        uint256 indexed sailingId,
+        uint256 departureDate,
+        uint256 numberOfNights,
+        string shipName
+    );
+
     event CabinCreated(
         uint256 indexed tokenId,
         uint256 price,
-        uint256 departureDate,
         uint256 initialAvailability,
         string cabinType
     );
@@ -62,45 +78,71 @@ contract CruiseLine is ERC1155, Ownable {
     );
 
     // Mapping to associate cabin tokens with their respective sailing IDs
-    mapping(uint256 => uint256) private _cabinSailing;
+    mapping(uint256 => Sailing) private _cabinSailing;
 
     constructor() ERC1155("") {
         // Pass an empty URI string for token metadata
         // You can replace it with the base URI for your tokens
     }
 
+    // Function to create a new sailing
+function createSailing(
+    uint256 departureDate,
+    uint256 numberOfNights,
+    string memory shipName   
+) external returns (uint256) {
+    // Increment the token ID counter
+    _sailingIds.increment();
+
+    uint256 newSailingId = _sailingIds.current();
+    
+    // Create a new sailing
+    _sailings[newSailingId] = Sailing(newSailingId, departureDate, numberOfNights, shipName);
+
+    emit SailingCreated(
+        newSailingId,
+        departureDate,
+        numberOfNights,
+        shipName
+    );
+
+    return newSailingId;
+}
+
     // Function to create a new cabin type
-    function createCabin(
-        uint256 price,
-        uint256 departureDate,
-        uint256 initialAvailability,
-        string memory cabinType,
-        uint256 sailingId
-    ) external returns (uint256) {
-        uint256 newTokenId = _tokenIds.current();
+function createCabin(
+    uint256 price,
+    uint256 initialAvailability,
+    string memory cabinType,
+    uint256 sailingId
+) external returns (uint256) {
+    uint256 newTokenId = _tokenIds.current();
 
-        // Create a new cabin
-        _cabins[newTokenId] = Cabin(price, departureDate, initialAvailability, cabinType);
+    // Create a new cabin
+    _cabins[newTokenId] = Cabin(price, initialAvailability, cabinType);
 
-        // Associate the cabin token with the sailing ID
-        _cabinSailing[newTokenId] = sailingId;
+    // Fetch the sailing details
+    Sailing storage sailing = _sailings[sailingId];
 
-        // Add cabin to the cabinsMinted mapping and set equal to 0
-        _cabinsMinted[newTokenId] = 0;
+    // Associate the cabin token with the sailing details
+    _cabinSailing[newTokenId] = sailing;
 
-        // Increment the token ID counter
-        _tokenIds.increment();
+    // Add cabin to the cabinsMinted mapping and set equal to 0
+    _cabinsMinted[newTokenId] = 0;
 
-         emit CabinCreated(
-            newTokenId,
-            price,
-            departureDate,
-            initialAvailability,
-            cabinType
-        );
+    // Increment the token ID counter
+    _tokenIds.increment();
 
-        return newTokenId;
-    }
+    emit CabinCreated(
+        newTokenId,
+        price,
+        initialAvailability,
+        cabinType
+    );
+
+    return newTokenId;
+}
+
 
     // Function to mint new cabin tokens
     function mintCabin(
@@ -135,9 +177,14 @@ contract CruiseLine is ERC1155, Ownable {
         return _cabins[tokenId];
     }
 
-    // Function to get the sailing ID associated with a cabin token
-    function getSailingId(uint256 tokenId) external view returns (uint256) {
+    // Function to get the sailing associated with a cabin token
+    function getCabinSailing(uint256 tokenId) external view returns (Sailing memory) {
         return _cabinSailing[tokenId];
+    }
+
+    // Function to get the sailing associated with a sailing ID
+    function getSailing(uint256 sailingId) external view returns (Sailing memory) {
+        return _sailings[sailingId];
     }
 
     // Function to get the balance of a specific cabin type for an address

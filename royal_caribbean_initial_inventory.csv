@@ -1,0 +1,10 @@
+﻿cruiseLine,cruiseName,shipName,departurePort,departureDate,numberOfNights,destination1,destination2,destination3,destination4,destination5,destination6,destination7,priceETH
+Royal Caribbean,Bahamas and Perfect Day Cruise,Independence of the Seas,Orlando (Port Canveral),2023-07-05,4,"Nassau, Bahamas","CocoCay, Bahamas","Labadee, Haiti",,,,,0.246
+Royal Caribbean,Western Caribbean and Perfect Day Cruise,Mariner of the Seas,Orlando (Port Canveral),2023-07-23,6,"Labadee, Haiti","Falmouth, Jamaica","CocoCay, Bahamas",,,,,0.464
+Royal Caribbean,Western Caribbean Cruise,Independence of the Seas,Miami,2023-06-28,4,"CocoCay, Bahamas","Cozumel, Mexico",,,,,,0.185
+Royal Caribbean,Eastern Caribbean Cruise,Independence of the Seas,Miami,2023-08-01,4,"Labadee, Haiti",,,,,,,0.129
+Royal Caribbean,7 Night Western Caribbean Cruise,Independence of the Seas,Miami,2023-08-08,7,"Nassau, Bahamas","George Town, Grand Cayman","Falmouth, Jamaica","Labadee, Haiti",,,,0.555
+Royal Caribbean,Bermuda Cruise,Mariner of the Seas,Orlando (Port Canveral),2023-07-24,8,"CocoCay, Bahamas","Bimini, Bahamas",Bermuda,"Nassau, Bahamas",,,,0.612
+Royal Caribbean,Southern Caribbean Cruise,Adventure of the Seas,Orlando (Port Canveral),2023-09-09,8,"Willemstad, Curacao","Oranjestad, Aruba","Labadee, Haiti",,,,,0.595
+Royal Caribbean,Canada and New England Cruise,Vision of the Seas,Baltimore,2023-07-01,9,"Boston, MA","Portland, ME",Saint John (Bay of Fundy),New Brunswick,"Halifax, Nova Scotia","Sydney, Nova Scotia",,0.445
+Royal Caribbean,Iceland and Ireland Cruise,Jewel of the Seas,Amsterdam,2023-07-02,12,"Reykjavik, Iceland","Akureyri, Iceland","Seydisfjordur, Iceland","Belfast, Northern Ireland","Liverpool, England","Cork, Ireland",,1.112
