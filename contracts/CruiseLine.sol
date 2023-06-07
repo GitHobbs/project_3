@@ -1,10 +1,9 @@
 /// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 
 contract CruiseLine is ERC1155, Ownable {
     using Counters for Counters.Counter;
@@ -39,7 +38,6 @@ contract CruiseLine is ERC1155, Ownable {
         string cabinType;
     }
 
-
     event CabinMinted(
         uint256 indexed tokenId,
         address indexed account,
@@ -72,89 +70,102 @@ contract CruiseLine is ERC1155, Ownable {
         string cabinType
     );
 
-    event ContractBalanceWithdrawn(
-        address indexed owner,
-        uint256 amount
+    event Log(
+        string 
     );
+
+    event LogNumber(uint);
+    
+    event Sailings (
+          uint256 sailingId,
+        uint256 departureDate,
+        uint256 numberOfNights,
+        string shipName
+    );
+
+
+    event ContractBalanceWithdrawn(address indexed owner, uint256 amount);
 
     // Mapping to associate cabin tokens with their respective sailing IDs
     mapping(uint256 => Sailing) private _cabinSailing;
 
-    constructor() ERC1155("") {
+    constructor() ERC1155("127.0.0.1:8545") {
         // Pass an empty URI string for token metadata
         // You can replace it with the base URI for your tokens
     }
 
     // Function to create a new sailing
-function createSailing(
-    uint256 departureDate,
-    uint256 numberOfNights,
-    string memory shipName   
-) external returns (uint256) {
-    // Increment the token ID counter
-    _sailingIds.increment();
+    function createSailing(
+        uint256 departureDate,
+        uint256 numberOfNights,
+        string memory shipName
+    ) external returns (uint256) {
+        // Increment the token ID counter
+        _sailingIds.increment();
 
-    uint256 newSailingId = _sailingIds.current();
-    
-    // Create a new sailing
-    _sailings[newSailingId] = Sailing(newSailingId, departureDate, numberOfNights, shipName);
+        uint256 newSailingId = _sailingIds.current();
 
-    emit SailingCreated(
-        newSailingId,
-        departureDate,
-        numberOfNights,
-        shipName
-    );
+        // Create a new sailing
+        _sailings[newSailingId] = Sailing(
+            newSailingId,
+            departureDate,
+            numberOfNights,
+            shipName
+        );
 
-    return newSailingId;
-}
+        emit SailingCreated(
+            newSailingId,
+            departureDate,
+            numberOfNights,
+            shipName
+        );
+
+        return newSailingId;
+    }
 
     // Function to create a new cabin type
-function createCabin(
-    uint256 price,
-    uint256 initialAvailability,
-    string memory cabinType,
-    uint256 sailingId
-) external returns (uint256) {
-    uint256 newTokenId = _tokenIds.current();
+    function createCabin(
+        uint256 price,
+        uint256 initialAvailability,
+        string memory cabinType,
+        uint256 sailingId
+    ) external returns (uint256) {
+        uint256 newTokenId = _tokenIds.current();
 
-    // Create a new cabin
-    _cabins[newTokenId] = Cabin(price, initialAvailability, cabinType);
+        // Create a new cabin
+        _cabins[newTokenId] = Cabin(price, initialAvailability, cabinType);
 
-    // Fetch the sailing details
-    Sailing storage sailing = _sailings[sailingId];
+        // Fetch the sailing details
+        Sailing storage sailing = _sailings[sailingId];
 
-    // Associate the cabin token with the sailing details
-    _cabinSailing[newTokenId] = sailing;
+        // Associate the cabin token with the sailing details
+        _cabinSailing[newTokenId] = sailing;
 
-    // Add cabin to the cabinsMinted mapping and set equal to 0
-    _cabinsMinted[newTokenId] = 0;
+        // Add cabin to the cabinsMinted mapping and set equal to 0
+        _cabinsMinted[newTokenId] = 0;
 
-    // Increment the token ID counter
-    _tokenIds.increment();
+        // Increment the token ID counter
+        _tokenIds.increment();
 
-    emit CabinCreated(
-        newTokenId,
-        price,
-        initialAvailability,
-        cabinType
-    );
+        emit CabinCreated(newTokenId, price, initialAvailability, cabinType);
 
-    return newTokenId;
-}
-
+        return newTokenId;
+    }
 
     // Function to mint new cabin tokens
-    function mintCabin(
-        uint256 tokenId,
-        uint256 amount
-    ) external payable {
+    function mintCabin(uint256 tokenId, uint256 amount) external payable {
         address account = msg.sender;
         // Check if there are enough cabins available
-        require(_cabins[tokenId].availability >= amount, "Insufficient availability");
+        require(
+            _cabins[tokenId].availability >= amount,
+            "Insufficient availability"
+        );
 
         // Check if the sent amount matches the required price
-        require(msg.value == _cabins[tokenId].price * amount, "Incorrect amount sent");
+        require(
+            msg.value == _cabins[tokenId].price * amount,
+            "Incorrect amount sent"
+        );
 
         // Mint the new cabin tokens
         _mint(account, tokenId, amount, "");
@@ -178,17 +189,30 @@ function createCabin(
     }
 
     // Function to get the sailing associated with a cabin token
-    function getCabinSailing(uint256 tokenId) external view returns (Sailing memory) {
+    function getCabinSailing(uint256 tokenId)
+        external
+        view
+        returns (Sailing memory)
+    {
         return _cabinSailing[tokenId];
     }
 
     // Function to get the sailing associated with a sailing ID
-    function getSailing(uint256 sailingId) external view returns (Sailing memory) {
+    function getSailing(uint256 sailingId)
+        external
+        view
+        returns (Sailing memory)
+    {
+    
         return _sailings[sailingId];
     }
 
     // Function to get the balance of a specific cabin type for an address
-    function balanceOfCabin(address account, uint256 tokenId) external view returns (uint256) {
+    function balanceOfCabin(address account, uint256 tokenId)
+        external
+        view
+        returns (uint256)
+    {
         return _balances[tokenId][account];
     }
 
@@ -220,26 +244,37 @@ function createCabin(
     }
 
     // Function to update the availability of a cabin
-    function updateCabinAvailability(
-        uint256 tokenId,
-        uint256 newAvailability
-    ) external onlyOwner {
+    function updateCabinAvailability(uint256 tokenId, uint256 newAvailability)
+        external
+        onlyOwner
+    {
         _cabins[tokenId].availability = newAvailability;
     }
 
     //Function to retrieve availability for a particular tokenId
-    function getAvailability(uint256 tokenId) external view returns(uint256) {
+    function getAvailability(uint256 tokenId) external view returns (uint256) {
         return _cabins[tokenId].availability;
     }
 
     //Function to get contract balance
-    function getContractBalance() external view returns(uint256) {
+    function getContractBalance() external view returns (uint256) {
         return address(this).balance;
     }
 
-    //Function to get all sailings
-    function getAllSailings () external view returns(_sailings[] memory) {
-        return _sailings;
+
+    function getSailingCount () external view returns (uint256){
+        return _sailingIds.current();
     }
 
+    function getAllSailings() external view returns (Sailing[] memory){
+         uint256 totalSailings = _sailingIds.current();
+        Sailing[] memory sailings = new Sailing[](totalSailings);
+        
+        for (uint256 i = 0; i < totalSailings; i++) {
+            sailings[i] = _sailings[i];
+        }
+        
+        return sailings;
+    }
+    
 }
