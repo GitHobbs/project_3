@@ -237,4 +237,9 @@ function createCabin(
         return address(this).balance;
     }
 
+    //Function to get all sailings
+    function getAllSailings () external view returns(_sailings[] memory) {
+        return _sailings;
+    }
+
 }

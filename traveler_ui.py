@@ -17,7 +17,7 @@ contract = load_contract()
 
 accounts = w3.eth.accounts
 
-st.title("Cruise Line Booking")
+st.title("Book Your Cruise!")
 st.write("Choose an account to get started")
 
 address = st.selectbox("Select Account", options=accounts)
@@ -29,14 +29,14 @@ st.markdown("---")
 
 st.header("Available Cruise Sailings")
 result = contract.functions.getAllSailings().call()
-df_sailings = pd.DataFrame(result, columns=['Sailing ID', 'Departure Date', 'Number Of Nights', 'Ship Name'])
+df_sailings = pd.DataFrame(result, columns=['Sailing ID', 'Cruise Line', 'Ship Name', 'Departure Date', 'Departure Port', 'Number Of Nights'])
 st.table(df_sailings)
 
 ################################################################################
 # View Available Cabins on Each Sailing
 ################################################################################
 
-st.header("Available Cabins on Each Sailing")
+st.header("View Available Cabins")
 selected_sailing_id = st.selectbox(
     "Select a Sailing to View Available Cabins", options=df_sailings['Sailing ID'].values)
 sailing = contract.functions.getSailing(selected_sailing_id).call()
