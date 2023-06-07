@@ -218,6 +218,32 @@
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "Log",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "LogNumber",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -356,6 +382,37 @@
 			}
 		],
 		"name": "SailingCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "sailingId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "departureDate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "numberOfNights",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "shipName",
+				"type": "string"
+			}
+		],
+		"name": "Sailings",
 		"type": "event"
 	},
 	{
@@ -603,6 +660,41 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getAllSailings",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "sailingId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "departureDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "numberOfNights",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "shipName",
+						"type": "string"
+					}
+				],
+				"internalType": "struct CruiseLine.Sailing[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -747,6 +839,19 @@
 				"internalType": "struct CruiseLine.Sailing",
 				"name": "",
 				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getSailingCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
