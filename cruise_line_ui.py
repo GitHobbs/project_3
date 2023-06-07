@@ -14,6 +14,10 @@ load_dotenv()
 # Define and connect a Web3 provider
 w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
 
+################################################################################
+# Load Contract
+################################################################################
+
 # Load_Contract Function
 @st.cache(allow_output_mutation=True)
 def load_contract():
@@ -23,7 +27,8 @@ def load_contract():
 
     # Set the contract address (this is the address of the deployed contract)
     contract_address = os.getenv("SMART_CONTRACT_ADDRESS")
-
+    print("contract_address")
+    print(contract_address)
     # Get the contract
     contract = w3.eth.contract(
         address=contract_address,
@@ -35,12 +40,19 @@ def load_contract():
 # Load the contract
 contract = load_contract()
 
+################################################################################
+# Supplier Dashboard -- Create Sailings
+################################################################################
+
 # Cruise Sailing Inventory Management Feature
 st.title("Cruise Line Dashboard")
 st.write("Choose an account to get started")
 accounts = w3.eth.accounts
 address = st.selectbox("Select Account", options=accounts)
 st.markdown("---")
+
+st.markdown("---")
+st.header("Create a Sailing")
 
 # State for new data
 new_data = {}
@@ -60,31 +72,29 @@ new_data['departurePort'] = st.text_input("Departure Port")
 new_data['departureDate'] = st.date_input("Departure Date")
 new_data['numberOfNights'] = st.number_input("Number of Nights", min_value=1)
 new_data['priceETH'] = st.number_input("Price(ETH)")
-for i in range(1, 8):
+for i in range(1, 6):
     new_data[f'destination{i}'] = st.text_input(f"Destination {i}")
 
 def add_sailing(new_data):
     
-    
     departure_date = datetime.datetime(new_data['departureDate'].year, new_data['departureDate'].month, new_data['departureDate'].day)
     departure_timestamp = int(departure_date.timestamp())
-
+    
     # Call the createSailing function from the contract
     tx_hash = contract.functions.createSailing(
         departure_timestamp, 
         new_data['numberOfNights'], 
         new_data['shipName']
     ).transact({'from': address})
-
+    
     # Wait for the transaction to be mined, and get the transaction receipt
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-
+    
     # Parse the SailingCreated event from the logs
     event = contract.events.SailingCreated().processReceipt(tx_receipt)
-    print(event)
+    
     # Initialize new_sailingId with a default value
     new_sailingId = 1
-
     # Check if event is not empty
     if event:
         # Get the new sailingId from the event logs
@@ -108,8 +118,40 @@ st.dataframe(initial_data)
 
 
 ################################################################################
-# List Cruises
+# Supplier Dashboard -- Create Cabins
 ################################################################################
+
+st.markdown("---")
+st.header("Create a Cabin")
+
+# State for new cabin data
+new_cabin_data = {}
+
+@st.cache(allow_output_mutation=True)
+def get_cabin_dataframe():
+    return pd.DataFrame()
+
+# Initial cabin data as an empty DataFrame
+initial_cabin_data = get_cabin_dataframe()
+
+# Input fields
+new_cabin_data['sailingId'] = st.selectbox("Select Sailing ID", options=initial_data['sailingId'].unique())
+cabin_types = ['Interior', 'Outside View', 'Balcony', 'Suite']
+new_cabin_data['cabinType'] = st.selectbox("Cabin Type", options=cabin_types)
+new_cabin_data['price'] = st.number_input("Price(ETH)", key='price_input')
+new_cabin_data['initialAvailability'] = st.number_input("Initial Availability", min_value=1, key='initial_availability_input')
+
+# new_cabin_data['availability'] will equal initialAvailability for now
+new_cabin_data['availability'] = new_cabin_data['initialAvailability']
+
+if st.button('Create Cabin'):
+    new_cabin_data['tokenId'] = create_cabin(new_cabin_data)
+    initial_cabin_data = initial_cabin_data.append(new_cabin_data, ignore_index=True)
+
+# Display the cabin data
+st.dataframe(initial_cabin_data)
+
+
 
 
 
