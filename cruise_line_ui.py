@@ -15,16 +15,20 @@ load_dotenv()
 # Define and connect a Web3 provider
 w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# Load_Contract Function
+>>>>>>> main
 
-################################################################################
-# Load Contract
-################################################################################
 
+<<<<<<< HEAD
 =======
 >>>>>>> f5fc69c48468111bb956ff63c9ce9fcb10607de3
 # Load_Contract Function
 
 
+=======
+>>>>>>> main
 def load_contract():
     # Load the contract ABI
     with open(Path('./contracts/compiled/CruiseLine_abi.json')) as f:
@@ -73,21 +77,18 @@ def get_dataframe():
     return pd.DataFrame()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Initial data as an empty DataFrame
 initial_data = get_dataframe()
+=======
+##############################
+# Functions
+##############################
+>>>>>>> main
 
-# Input fields
-new_data['cruiseLine'] = st.text_input("Cruise Line")
-new_data['cruiseName'] = st.text_input("Cruise Name")
-new_data['shipName'] = st.text_input("Ship Name")
-new_data['departurePort'] = st.text_input("Departure Port")
-new_data['departureDate'] = st.date_input("Departure Date")
-new_data['numberOfNights'] = st.number_input("Number of Nights", min_value=1)
-new_data['priceETH'] = st.number_input("Price(ETH)")
-for i in range(1, 6):
-    new_data[f'destination{i}'] = st.text_input(f"Destination {i}")
 
 def add_sailing(new_data):
+<<<<<<< HEAD
     
     departure_date = datetime.datetime(new_data['departureDate'].year, new_data['departureDate'].month, new_data['departureDate'].day)
 =======
@@ -101,6 +102,11 @@ def add_sailing(new_data):
     departure_date = datetime.datetime(
         new_data['departureDate'].year, new_data['departureDate'].month, new_data['departureDate'].day)
 >>>>>>> f5fc69c48468111bb956ff63c9ce9fcb10607de3
+=======
+
+    departure_date = datetime.datetime(
+        new_data['departureDate'].year, new_data['departureDate'].month, new_data['departureDate'].day)
+>>>>>>> main
     departure_timestamp = int(departure_date.timestamp())
     
     # Call the createSailing function from the contract
@@ -108,6 +114,7 @@ def add_sailing(new_data):
         departure_timestamp,
         new_data['numberOfNights'],
         new_data['shipName']
+<<<<<<< HEAD
 <<<<<<< HEAD
     ).transact({'from': address})
     
@@ -181,6 +188,64 @@ with tab1:
     df.set_index('ID', inplace=True)
     st.table(df)
 
+=======
+    ).transact({'from': address, 'gas': 500000})
+
+
+def create_cabin(new_cabin_data):
+    tx_hash = contract.functions.createCabin(
+        int(new_cabin_data['price']),
+        new_cabin_data['initialAvailability'],
+        new_cabin_data['cabinType'],
+        new_cabin_data['sailingId']
+        ).transact(
+        {'from': address, 'gas': 500000})
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    st.write(receipt)
+
+
+# Initial data as an empty DataFrame
+initial_data = pd.DataFrame()
+
+tab1, tab2 = st.tabs(["Cruise", "Cabins"])
+
+with tab1:
+
+    # columns with in tab 1
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # Input fields
+        new_data['cruiseLine'] = st.text_input("Cruise Line")
+        new_data['cruiseName'] = st.text_input("Cruise Name")
+        new_data['shipName'] = st.text_input("Ship Name")
+        new_data['departurePort'] = st.text_input("Departure Port")
+        new_data['departureDate'] = st.date_input("Departure Date")
+        new_data['numberOfNights'] = st.number_input(
+            "Number of Nights", min_value=1)
+        new_data['priceETH'] = st.number_input("Price(ETH)")
+        for i in range(1, 5):
+            new_data[f'destination{i}'] = st.text_input(f"Destination {i}")
+
+    with col2:
+
+        # Use the padded class for the component
+        st.write("Upload Cruise Image")
+        st.button("Upload Image")
+        st.image("assets/cruise.jpg")
+
+    if st.button('Add Sailing'):
+        new_data['sailingId'] = add_sailing(new_data)
+        st.write(new_data)
+    # initial_data = initial_data.append(new_data, ignore_index=True)
+
+    result = contract.functions.getAllSailings().call()
+    del result[0]
+    df = pd.DataFrame(result, columns=['ID', 'Date', 'Nights', 'Cruise'])
+    df.set_index('ID', inplace=True)
+    st.table(df)
+
+>>>>>>> main
     sailings_list = df.drop(columns=['Date', 'Nights'])
 
 ################################################################################
@@ -228,6 +293,7 @@ with tab2:
     st.header("Create a Cabin")
     # State for new cabin data
     new_cabin_data = {}
+<<<<<<< HEAD
 
     col1, col2 = st.columns(2)
 
@@ -235,6 +301,15 @@ with tab2:
         selected_sail = st.selectbox(
             "Select a Cruise", options=sailings_list['Cruise'])
 
+=======
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        selected_sail = st.selectbox(
+            "Select a Cruise", options=sailings_list['Cruise'])
+
+>>>>>>> main
         cabin_types = ['Interior', 'Outside View', 'Balcony', 'Suite']
 
         # st.selectbox("Select a Sailing", options=cabin_types)
