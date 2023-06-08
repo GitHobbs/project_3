@@ -42,8 +42,8 @@ st.title("Cruise Line Dashboard")
 st.write("Choose an account to get started")
 
 # Demo contract functions
-result = contract.functions.getSailing(2).call()
-st.write(result)
+#result = contract.functions.getSailing(2).call()
+#st.write(result)
 
 accounts = w3.eth.accounts
 address = st.selectbox("Select Account", options=accounts)
@@ -69,9 +69,18 @@ def add_sailing(new_data):
 
     # Call the createSailing function from the contract
     contract.functions.createSailing(
+        new_data['cruiseLine'],
+        new_data['cruiseName'],
+        new_data['shipName'],
         departure_timestamp,
+        new_data['departurePort'],
         new_data['numberOfNights'],
-        new_data['shipName']
+        new_data['price'],
+        new_data['destination1'],
+        new_data['destination2'],
+        new_data['destination3'],
+        
+    
     ).transact({'from': address, 'gas': 500000})
 
 
@@ -102,12 +111,12 @@ with tab1:
         new_data['cruiseLine'] = st.text_input("Cruise Line")
         new_data['cruiseName'] = st.text_input("Cruise Name")
         new_data['shipName'] = st.text_input("Ship Name")
-        new_data['departurePort'] = st.text_input("Departure Port")
         new_data['departureDate'] = st.date_input("Departure Date")
+        new_data['departurePort'] = st.text_input("Departure Port")
         new_data['numberOfNights'] = st.number_input(
             "Number of Nights", min_value=1)
-        new_data['priceETH'] = st.number_input("Price(ETH)")
-        for i in range(1, 5):
+        new_data['price'] = int(st.number_input("Price(ETH)"))
+        for i in range(1, 4):
             new_data[f'destination{i}'] = st.text_input(f"Destination {i}")
 
     with col2:
@@ -124,11 +133,11 @@ with tab1:
 
     result = contract.functions.getAllSailings().call()
     del result[0]
-    df = pd.DataFrame(result, columns=['ID', 'Date', 'Nights', 'Cruise'])
-    df.set_index('ID', inplace=True)
+    df = pd.DataFrame(result, columns=['Sailing ID', 'Cruise Line', 'Cruise Name', 'Ship Name', 'Departure Date', 'Departure Port', 'Number of Nights', 'Price(ETH)', 'Destination 1', 'Destination 2', 'Destination 3', 'Destination 4'])
+    df.set_index('Sailing ID', inplace=True)
     st.table(df)
 
-    sailings_list = df.drop(columns=['Date', 'Nights'])
+    sailings_list = df.drop(columns=['Departure Date', 'Number of Nights'])
 
 ################################################################################
 # List Cruises

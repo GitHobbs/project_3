@@ -191,9 +191,29 @@
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "cruiseLine",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "cruiseName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "shipName",
+				"type": "string"
+			},
+			{
 				"internalType": "uint256",
 				"name": "departureDate",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "departurePort",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
@@ -201,8 +221,23 @@
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
-				"name": "shipName",
+				"name": "destination1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "destination2",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "destination3",
 				"type": "string"
 			}
 		],
@@ -357,10 +392,28 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "sailingId",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cruiseLine",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cruiseName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "shipName",
+				"type": "string"
 			},
 			{
 				"indexed": false,
@@ -370,14 +423,38 @@
 			},
 			{
 				"indexed": false,
+				"internalType": "string",
+				"name": "departurePort",
+				"type": "string"
+			},
+			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "numberOfNights",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"internalType": "string",
-				"name": "shipName",
+				"name": "destination1",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "destination2",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "destination3",
 				"type": "string"
 			}
 		],
@@ -395,9 +472,33 @@
 			},
 			{
 				"indexed": false,
+				"internalType": "string",
+				"name": "cruiseLine",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cruiseName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "shipName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "departureDate",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "departurePort",
+				"type": "string"
 			},
 			{
 				"indexed": false,
@@ -407,8 +508,26 @@
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"internalType": "string",
-				"name": "shipName",
+				"name": "destination1",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "destination2",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "destination3",
 				"type": "string"
 			}
 		],
@@ -671,9 +790,29 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "cruiseLine",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "cruiseName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "shipName",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
 						"name": "departureDate",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "departurePort",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
@@ -681,8 +820,23 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
-						"name": "shipName",
+						"name": "destination1",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination2",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination3",
 						"type": "string"
 					}
 				],
@@ -767,9 +921,29 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "cruiseLine",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "cruiseName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "shipName",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
 						"name": "departureDate",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "departurePort",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
@@ -777,8 +951,23 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
-						"name": "shipName",
+						"name": "destination1",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination2",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination3",
 						"type": "string"
 					}
 				],
@@ -821,9 +1010,29 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "cruiseLine",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "cruiseName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "shipName",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
 						"name": "departureDate",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "departurePort",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
@@ -831,8 +1040,23 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
-						"name": "shipName",
+						"name": "destination1",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination2",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "destination3",
 						"type": "string"
 					}
 				],

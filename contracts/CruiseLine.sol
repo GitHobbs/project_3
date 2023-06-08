@@ -26,9 +26,16 @@ contract CruiseLine is ERC1155, Ownable {
     // Struct to represent a sailing
     struct Sailing {
         uint256 sailingId;
-        uint256 departureDate;
-        uint256 numberOfNights;
+        string cruiseLine;
+        string cruiseName;
         string shipName;
+        uint256 departureDate;
+        string departurePort;
+        uint256 numberOfNights;
+        uint256 price;
+        string destination1;
+        string destination2;
+        string destination3;
     }
 
     // Struct to represent a cabin
@@ -57,10 +64,17 @@ contract CruiseLine is ERC1155, Ownable {
     );
 
     event SailingCreated(
-        uint256 indexed sailingId,
+        uint256 sailingId,
+        string cruiseLine,
+        string cruiseName,
+        string shipName,
         uint256 departureDate,
+        string departurePort,
         uint256 numberOfNights,
-        string shipName
+        uint256 price,
+        string destination1,
+        string destination2,
+        string destination3
     );
 
     event CabinCreated(
@@ -77,12 +91,19 @@ contract CruiseLine is ERC1155, Ownable {
     event LogNumber(uint);
     
     event Sailings (
-          uint256 sailingId,
+        uint256 sailingId,
+        string cruiseLine,
+        string cruiseName,
+        string shipName,
         uint256 departureDate,
+        string departurePort,
         uint256 numberOfNights,
-        string shipName
+        uint256 price,
+        string destination1,
+        string destination2,
+        string destination3
+        
     );
-
 
     event ContractBalanceWithdrawn(address indexed owner, uint256 amount);
 
@@ -96,9 +117,18 @@ contract CruiseLine is ERC1155, Ownable {
 
     // Function to create a new sailing
     function createSailing(
+        // uint256 sailingId,
+        string memory cruiseLine,
+        string memory cruiseName,
+        string memory shipName,
         uint256 departureDate,
+        string memory departurePort,
         uint256 numberOfNights,
-        string memory shipName
+        uint256 price,
+        string memory destination1,
+        string memory destination2,
+        string memory destination3
+        
     ) external returns (uint256) {
         // Increment the token ID counter
         _sailingIds.increment();
@@ -108,16 +138,33 @@ contract CruiseLine is ERC1155, Ownable {
         // Create a new sailing
         _sailings[newSailingId] = Sailing(
             newSailingId,
+            cruiseLine,
+            cruiseName,
+            shipName,
             departureDate,
+            departurePort,
             numberOfNights,
-            shipName
+            price,
+            destination1,
+            destination2,
+            destination3
+            
+            
         );
 
         emit SailingCreated(
             newSailingId,
+            cruiseLine,
+            cruiseName,
+            shipName,
             departureDate,
+            departurePort,
             numberOfNights,
-            shipName
+            price,
+            destination1,
+            destination2,
+            destination3
+            
         );
 
         return newSailingId;
