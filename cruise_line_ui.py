@@ -7,7 +7,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 import streamlit as st
 
-
 from pinata import pin_file_to_ipfs, pin_json_to_ipfs, convert_data_to_json
 
 load_dotenv()
