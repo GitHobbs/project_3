@@ -1,23 +1,20 @@
 # aWei
 
-# project_3
-aWei is a protocol built on the blockchain that allows cruise lines and hotels to tokenize and distribute cabin and room night inventory in a decentralized way.
-
 ## Summary
 
-aWei is a web3 platform that allows cruise lines to transparently manage, price, and sell inventory on the Ethereum blockchain.  It provides cruise lines with a UI and dashboard that allows them to add mintable inventory to the platform, track and fulfill bookings, and adjust pricing.  It also provides them with a customer UI that allows travelers to browse inventory and mint cabin reservations as NFTs directly from the cruise line.
+aWei is a web3 platform that allows cruise lines to transparently manage, price, and sell inventory on the Ethereum blockchain.  It provides cruise lines with a UI and dashboard that allows them to add mintable inventory to the platform, track and fulfill bookings, and adjust pricing.  It also provides them with a customer UI that allows travelers to browse inventory and mint cabin reservations as NFTs directly from the cruise line.  Customers can also easily transfer cabins to others via the same UI.
 
 ## Supplier Interface
 
 - allow cruiseline to input inventory information including:
   - departure date
-  - return date
+  - number of nights
   - destinations visited
-  - cabin type
+  - cruise name
   - price (ETH)
-  - port of origin
+  - departure port
   - cruise line
-  - total available inventory
+  - available inventory
 - create ERC 1155 mintable contract where travelers can mint cruise cabin NFTs
 
 ## Customer Interface
@@ -25,7 +22,7 @@ aWei is a web3 platform that allows cruise lines to transparently manage, price,
 - show cruise and cabin offerings
 - browse inventory
 - make bookings
-- mint NFT representing customer reservation (AI generated image?) upon purchase
+- mint NFT representing customer reservation (AI generated image?)
 
 ## Functionality
 
