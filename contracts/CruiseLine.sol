@@ -23,12 +23,29 @@ contract CruiseLine is ERC1155, Ownable {
     // Mapping to track tokens minted by tokenId
     mapping(uint256 => uint256) private _cabinsMinted;
 
+    // Mapping to store saling cabins
+    mapping(uint256 => Cabin) private _sailingCabins;
+
+      // Mapping to associate cabin tokens with their respective sailing IDs
+    mapping(uint256 => Sailing) private _cabinSailing;
+
+   
+
+
+
     // Struct to represent a sailing
     struct Sailing {
         uint256 sailingId;
-        uint256 departureDate;
-        uint256 numberOfNights;
+        string cruiseLine;
+        string cruiseName;
         string shipName;
+        uint256 departureDate;
+        string departurePort;
+        uint256 numberOfNights;
+        uint256 price;
+        string destination1;
+        string destination2;
+        string destination3;
     }
 
     // Struct to represent a cabin
@@ -36,6 +53,7 @@ contract CruiseLine is ERC1155, Ownable {
         uint256 price;
         uint256 availability;
         string cabinType;
+        uint256 sailingId;
     }
 
     event CabinMinted(
@@ -57,10 +75,17 @@ contract CruiseLine is ERC1155, Ownable {
     );
 
     event SailingCreated(
-        uint256 indexed sailingId,
+        uint256 sailingId,
+        string cruiseLine,
+        string cruiseName,
+        string shipName,
         uint256 departureDate,
+        string departurePort,
         uint256 numberOfNights,
-        string shipName
+        uint256 price,
+        string destination1,
+        string destination2,
+        string destination3
     );
 
     event CabinCreated(
@@ -77,17 +102,23 @@ contract CruiseLine is ERC1155, Ownable {
     event LogNumber(uint);
     
     event Sailings (
-          uint256 sailingId,
+        uint256 sailingId,
+        string cruiseLine,
+        string cruiseName,
+        string shipName,
         uint256 departureDate,
+        string departurePort,
         uint256 numberOfNights,
-        string shipName
+        uint256 price,
+        string destination1,
+        string destination2,
+        string destination3
+        
     );
-
 
     event ContractBalanceWithdrawn(address indexed owner, uint256 amount);
 
-    // Mapping to associate cabin tokens with their respective sailing IDs
-    mapping(uint256 => Sailing) private _cabinSailing;
+  
 
     constructor() ERC1155("127.0.0.1:8545") {
         // Pass an empty URI string for token metadata
@@ -96,10 +127,18 @@ contract CruiseLine is ERC1155, Ownable {
 
     // Function to create a new sailing
     function createSailing(
+        // uint256 sailingId,
+        string memory cruiseLine,
+        string memory cruiseName,
+        string memory shipName,
         uint256 departureDate,
+        string memory departurePort,
         uint256 numberOfNights,
-        string memory shipName
-    ) external returns (uint256) {
+        uint256 price,
+        string memory destination1,
+        string memory destination2,
+        string memory destination3
+    ) public returns (uint256)  {
         // Increment the token ID counter
         _sailingIds.increment();
 
@@ -108,17 +147,20 @@ contract CruiseLine is ERC1155, Ownable {
         // Create a new sailing
         _sailings[newSailingId] = Sailing(
             newSailingId,
+            cruiseLine,
+            cruiseName,
+            shipName,
             departureDate,
+            departurePort,
             numberOfNights,
-            shipName
+            price,
+            destination1,
+            destination2,
+            destination3
+            
+            
         );
 
-        emit SailingCreated(
-            newSailingId,
-            departureDate,
-            numberOfNights,
-            shipName
-        );
 
         return newSailingId;
     }
@@ -133,7 +175,7 @@ contract CruiseLine is ERC1155, Ownable {
         uint256 newTokenId = _tokenIds.current();
 
         // Create a new cabin
-        _cabins[newTokenId] = Cabin(price, initialAvailability, cabinType);
+        _cabins[newTokenId] = Cabin(price, initialAvailability, cabinType, sailingId);
 
         // Fetch the sailing details
         Sailing storage sailing = _sailings[sailingId];
@@ -276,5 +318,23 @@ contract CruiseLine is ERC1155, Ownable {
         
         return sailings;
     }
+
+     function getCabinCount () external view returns (uint256){
+        return _tokenIds.current();
+    }
     
+    function getAllCabinsFromSaling(uint256 sailingId)external view returns (Cabin[] memory){
+        uint256 totalCabinsSaling = _tokenIds.current();
+
+        Cabin[] memory cabins = new Cabin[](totalCabinsSaling);
+
+        // return all the cabins related to a salingId
+        for (uint256 i = 0 ; i < totalCabinsSaling; i++ ){
+             if(sailingId == _cabins[i].sailingId){
+                cabins[i] = _cabins[i];
+             }
+        }
+
+        return cabins;
+    }
 }
